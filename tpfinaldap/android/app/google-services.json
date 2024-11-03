@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "761147602295",
+    "firebase_url": "https://tpf-dap-poretti-vidal-lowden-default-rtdb.firebaseio.com",
+    "project_id": "tpf-dap-poretti-vidal-lowden",
+    "storage_bucket": "tpf-dap-poretti-vidal-lowden.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:761147602295:android:d238de97c3a85869751d72",
+        "android_client_info": {
+          "package_name": "com.ejemplo.tpfinaldap"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBu4WWCcYhTAWr1Cc895kmUX20LQM2yGOU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
