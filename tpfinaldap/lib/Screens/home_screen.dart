@@ -1,49 +1,88 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart'; // Importa go_router
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:tpfinaldap/Providers/ListProvider.dart';
+import 'package:tpfinaldap/Providers/UserProvider.dart';
 
-class HomeScreen extends StatelessWidget {
+
+class HomeScreen extends ConsumerWidget {
+  const HomeScreen({super.key});
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Obtenemos el estado de la lista de equipos de rugby desde el provider
+    var postsAsync = ref.watch(ListProvider);
+    // Obtenemos el nombre del usuario desde el provider
+    String usuario = ref.watch(UserProvider);
+
     return Scaffold(
-      appBar: AppBar(title: Text("Clubes")),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('Clubs').snapshots(),
-        builder: (context, snapshot) {
-          // Verificar si hay datos en el snapshot
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator()); // Mostrar indicador mientras se carga
-          }
-
-          if (snapshot.hasError) {
-            return Center(child: Text("Error al cargar los datos"));
-          }
-
-          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return Center(child: Text("No hay clubes disponibles"));
-          }
-
-          // Aquí obtenemos los documentos de la colección
-          final clubs = snapshot.data!.docs;
-
-          return ListView.builder(
-            itemCount: clubs.length,
-            itemBuilder: (context, index) {
-              var club = clubs[index]; // Acceso a un DocumentSnapshot
-
-              // Asegúrate de que los campos que estás utilizando existan en Firestore
-              return ListTile(
-                title: Text(club['title'] ?? 'Sin título'),
-                subtitle: Text(club['description'] ?? 'Sin descripción'),
-                onTap: () {
-                  // Navegar a la pantalla de detalle y pasar el DocumentSnapshot
-                  context.push('/detail', extra: club);
-                },
-              );
-            },
-          );
-        },
+      appBar: AppBar(
+        title: Text("Hola $usuario"), // Muestra el nombre del usuario
       ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                context.go('/login'); // Navega a la pantalla de login
+              },
+              child: const Text("Logout"),
+            ),
+            const SizedBox(height: 20),
+            Expanded(
+              child: postsAsync.when(
+                data: (posts) {
+                  // Si los datos se cargan correctamente, mostramos la lista de equipos
+                  return ListView.builder(
+                    itemCount: posts.length,
+                    itemBuilder: (context, index) {
+                      final post = posts[index]; // Cada post es un equipo de rugby
+
+                      return Card(
+                        child: ListTile(
+                          title: Text(post.title),
+                          subtitle: Text(post.description),
+                          onTap: () {
+                            // Guardamos el índice seleccionado y navegamos a la pantalla de detalle
+                            ref.read(pressedProvider.notifier).state = index;
+                            context.push('/card');
+                          },
+                        ),
+                      );
+                    },
+                  );
+                },
+                loading: () {
+                  // Mientras se cargan los datos, mostramos un indicador de carga
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+                error: (error, stack) {
+                  // Si ocurre un error al cargar los datos, mostramos un mensaje de error
+                  return Center(
+                    child: Text("Error al cargar equipos: $error"),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Cuando se presiona el botón flotante, navegamos a la pantalla de edición
+          ref.read(pressedProvider.notifier).state = -1;
+          context.push('/edit');
+        },
+        child: const Icon(Icons.add),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat, // Ubica el botón en la esquina inferior derecha
     );
   }
+}
+
+class ListProvider {
 }
