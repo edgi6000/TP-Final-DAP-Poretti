@@ -50,19 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyC3S5EOhaT-nA2LBN8YL5EsEBC63ZdJT4k',
-    appId: '1:761147602295:web:d238de97c3a85869751d72',
-    messagingSenderId: '761147602295',
-    projectId: 'tpf-dap-poretti-vidal-lowden',
-    authDomain: 'tpf-dap-poretti-vidal-lowden.firebaseapp.com',
-    storageBucket: 'tpf-dap-poretti-vidal-lowden.appspot.com',
+    apiKey: 'AIzaSyCFV7ixFguj9LPuxFulUDi1xYMsJmHbZjc',
+    appId: '1:288220042051:android:325241d5770f644a5e55f6',
+    messagingSenderId: '288220042051',
+    projectId: 'dap-aplicacion',
+    authDomain: 'dap-aplicacion.firebaseapp.com',
+    storageBucket: 'dap-aplicacion.appspot.com',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyC3S5EOhaT-nA2LBN8YL5EsEBC63ZdJT4k',
-    appId: '1:761147602295:android:d238de97c3a85869751d72',
-    messagingSenderId: '761147602295',
-    projectId: 'tpf-dap-poretti-vidal-lowden',
-    storageBucket: 'tpf-dap-poretti-vidal-lowden.firebasestorage.app',
+    apiKey: 'AIzaSyCFV7ixFguj9LPuxFulUDi1xYMsJmHbZjc',
+    appId: '1:288220042051:android:325241d5770f644a5e55f6',
+    messagingSenderId: '288220042051',
+    projectId: 'dap-aplicacion',
+    storageBucket: 'dap-aplicacion.firebasestorage.app',
   );
 }

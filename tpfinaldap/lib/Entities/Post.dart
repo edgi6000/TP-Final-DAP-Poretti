@@ -10,6 +10,4 @@ class Post {
     required this.imagesrc,
     required this.text,
   });
-
-  String? get id => null;
 }

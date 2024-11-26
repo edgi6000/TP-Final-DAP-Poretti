@@ -1,31 +1,58 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:myapp/core/app_router.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:tpfinaldap/Screens/login_screen.dart'; // Importa LoginScreen
-import 'package:tpfinaldap/Screens/home_screen.dart';   // Importa HomeScreen
-import 'package:tpfinaldap/Screens/element_detail_screen.dart'; // Importa ElementDetailScreen
-import 'firebase_options.dart';  // Asegúrate de tener la configuración de Firebase
+import 'firebase_options.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+void testFirestoreConnection() async {
+  try {
+    // Escribe un documento de prueba
+    await FirebaseFirestore.instance
+        .collection('test')
+        .doc('connectionTest')
+        .set({'connected': true});
+
+    // Lee el documento de prueba
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance
+        .collection('test')
+        .doc('connectionTest')
+        .get();
+
+    print('Firebase Firestore connection successful: ${snapshot.data()}');
+  } catch (e) {
+    print('Error connecting to Firebase Firestore: $e');
+  }
+}
+
+/*Future<void> fetchUsersFromFirestore() async {
+  DocumentSnapshot snapshot = await FirebaseFirestore.instance
+      .collection('test')
+      .doc('connectionTest')
+      .get();
+  final data = snapshot.data() as Map<String, dynamic>?;
+  print('Snapshot: $snapshot');
+  print('Snapshot ID: ${snapshot.id}');
+  print('Snapshot DATA: ${snapshot.data()}');
+  print('Snapshot DATA 0: ${data!['testname']}');
+}*/
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized(); // Asegura que los widgets estén listos antes de inicializar Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  testFirestoreConnection();  
+  runApp(const ProviderScope(child: MainApp()));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
+class MainApp extends StatelessWidget {
+  const MainApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Firestore App',
-      initialRoute: '/login', // Define la ruta inicial
-      routes: {
-        '/login': (context) => const LoginScreen(),  // Ruta para LoginScreen
-        '/home': (context) => const HomeScreen(),    // Ruta para HomeScreen
-        '/detail': (context) => const ElementDetailScreen(),  // Ruta para ElementDetailScreen
-      },
+    return MaterialApp.router(
+      routerConfig: appRouter,
     );
   }
 }
