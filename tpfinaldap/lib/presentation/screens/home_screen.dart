@@ -55,7 +55,7 @@ class HomeScreen extends ConsumerWidget {
               },
               error: (error, stack) {
                 return Center(
-                  child: Text("Error al cargar películas: $error"),
+                  child: Text("Error al cargar clubes: $error"),
                 );
               },
             )),
